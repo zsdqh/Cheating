@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{% static 'bootstrap\css\bootstrap.min.css' %}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    {% comment %} css {% endcomment %}
+    <link rel="stylesheet" href="{% static 'css\base.css' %}">
+</head>
+<body>
+<header class="header" id="header">
+  <div class="header-container">
+    <div class="header-logo">
+      <a href="/">
+        <img src="{% static 'img/ЧитинГ.png' %}" alt="" class="cheating-logo">
+      </a>
+    </div>
+    <div class="header-profile">
+      <a href="#" class="m-3">
+        <i class="fas fa-user-circle login-logo"></i>
+      </a>
+    </div>
+    <div class="header-content">
+      {% block header %}
+      
+      {% endblock header %}
+    </div>
+  </div>
+  <hr class="header-line"/>
+</header>
+    <div class="container">
+        {% block content %}
+
+        {% endblock content %}
+    </div>
+    <img src="{% static 'img/tom.png' %}" class="frame1" alt="">
+    <img src="{% static 'img/mike.png' %}" class="frame2" alt="">
+
+    <footer class="footer align-items-center text-center mt-3">
+        <hr class="horizontal-card-line" />
+        <p>Контакты:<br>
+        email: pavlovich5703@gmail.com<br>
+        тел: +375(29)250-31-95</p>
+    </footer>
+    {% comment %} js for bootstrap {% endcomment %}
+    <script src="{% static 'bootstrap\js\bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

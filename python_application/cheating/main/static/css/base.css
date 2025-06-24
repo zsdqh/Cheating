@@ -1,0 +1,565 @@
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap");
+
+body {
+  font-family: "Comfortaa", sans-serif;
+  font-size: 18px;
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+h1 {
+  font-size: 48px;
+}
+
+h2 {
+  font-size: 48px;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 36px;
+}
+h5 {
+  font-size: 18px;
+  margin: 0;
+  font-weight: 600;
+}
+
+footer {
+  background-color: white;
+  margin-bottom: 0;
+  padding-bottom: 1px;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 230px;
+  transition: all 0.5s ease;
+  overflow: hidden;
+}
+.header-container.expanded{
+  height: auto;
+  transition: all 0.5s ease;
+}
+.header.expanded {
+  padding-bottom: 10px;
+  transition: all 0.5s ease;
+}
+.header-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 50px;
+}
+.form-container{
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.header-logo {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+}
+.cheating-logo {
+  width: 200px;
+  height: 200px;
+  margin: 10px;
+}
+.header-profile {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  margin: 5px;
+}
+.search-container {
+  position: absolute;
+  margin-bottom: 20px;
+  top:75px;
+
+}
+.login-logo {
+  font-size: 75px;
+  background: black;
+  color: white;
+  border-radius: 50%;
+  -webkit-text-stroke: 5px black;
+}
+.find-line input {
+  width: 350px;
+  border-radius: 25px;
+  font-size: 22px;
+  padding: 5px;
+}
+.expander {
+  position: absolute;
+  left: 49.5%;
+  bottom: 20px;
+}
+
+.double-down {
+  cursor: pointer;
+  transition: transform 0.5s ease;
+}
+.double-down.rotated {
+  transform: rotate(180deg);
+}
+
+.find-line i {
+  font-size: 25px;
+  cursor: pointer;
+}
+.container {
+  box-sizing: border-box;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+.heart {
+  font-size: 50px;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 10px;
+  -webkit-text-stroke: 5px black;
+  transition: all 0.5s ease;
+}
+.heart:hover {
+  transform: scale(0.9);
+}
+.red-heart {
+  color: red;
+}
+.empty-heart {
+  color: transparent;
+}
+
+.header {
+  background-color: #fff;
+  box-shadow: var(--box-shadow);
+  position: relative;
+  height: 230px;
+  transition: all 0.5s ease;
+  overflow: hidden;
+}
+
+.home {
+  align-items: center;
+}
+
+.home-title {
+  margin-top: 210px;
+  margin-bottom: 50px;
+}
+
+.horizontal-card-line {
+  width: 100%;
+  border: 2px solid black;
+  margin: 0;
+  padding: 0;
+  opacity: 100%;
+  margin-bottom: 10px;
+}
+
+.header-line {
+  width: 100%;
+  border: 2px solid black;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  opacity: 100%;
+  bottom: 0px;
+}
+
+.home-card {
+  width: 400px;
+  height: 720px;
+  border: 5px solid black;
+  border-radius: 30px;
+  transition: all 0.5s ease;
+  background-color: #dbd8d3;
+  overflow: hidden;
+  cursor: pointer;
+}
+.home-card:hover {
+  transform: translateY(-20px);
+  margin: 0;
+  padding: 0;
+}
+
+.home-cards {
+  margin-top: 50px;
+  width: 66%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+
+.title-card {
+  max-width: 380px;
+  margin: 10px 0px;
+  padding-top: 0px;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.card-img {
+  margin: 0;
+  padding: 0;
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+}
+
+.muscle-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 600px;
+  margin-top: 10px;
+}
+
+.home-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 50px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.frame1 {
+  position: fixed;
+  left: 0.5px;
+  z-index: -1;
+  bottom: 0.5px;
+}
+
+.frame2 {
+  position: fixed;
+  right: 0.5px;
+  bottom: 0.5px;
+  z-index: -1;
+}
+
+.detail-exercise {
+  border-radius: 30px;
+  margin: 10%;
+  margin-top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #dbd8d3;
+  width: 1250px;
+  border: 3px solid grey;
+  padding-bottom: 100px;
+}
+.detail-exercise div {
+  text-align: center;
+  align-content: center;
+}
+.detail-image {
+  width: 500px;
+  height: 500px;
+  margin-top: 20px;
+  border: 3px solid grey;
+  border-radius: 30px;
+}
+.detail-title .heart {
+  margin-left: 10px;
+}
+.detail-description {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.detail-description h2 span {
+  font-size: 50px;
+}
+.description-text {
+  margin-top: 30px;
+  max-width: 1000px;
+  font-size: 23px;
+  text-align: justify;
+}
+.single-muscle {
+  border: 3px black solid;
+  color: white;
+  background-color: #2c2c2c;
+  border-radius: 20px;
+  max-width: 200px;
+  min-width: 150px;
+  max-height: 70px;
+  padding: 5px;
+  margin: 3px 5px;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.single-muscle:hover {
+  transform: scale(1.05);
+  text-decoration: underline;
+}
+
+.youtube-video {
+  width: 700px;
+  height: 393px;
+  margin: 20px;
+}
+.missed-video {
+  padding-left: 125px;
+  padding-right: 125px;
+  padding-top: 150px;
+  padding-bottom: 150px;
+  margin: 20px;
+  font-size: 35px;
+  border: 5px solid black;
+  font-weight: 700;
+  border-radius: 10px;
+}
+
+
+/* Стили для контейнера вкладок */
+.filters-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.filter-tab {
+  padding: 8px 25px;
+  cursor: pointer;
+  background: #dbd8d3;
+  border: 2px solid black;
+  border-radius: 5px 5px 0 0;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  position: relative;
+  bottom: -2px;
+  z-index: 1;
+}
+
+.filter-tab.active {
+  background: #dbd8ed;
+  color: white;
+  border-bottom: 2px solid #2c2c2c;
+}
+
+.filter-tab:hover {
+  background: #2c2c2c;
+  color: white;
+}
+
+.filters-content {
+  border: 2px solid black;
+  padding: 20px 80px;
+  background: #dbd8d3;
+  border-radius: 0 0 5px 5px; 
+  min-height: 150px;
+  max-width:1330px;
+}
+
+.filter-tabcontent {
+  display: none;
+}
+
+.filter-tabcontent.active {
+  display: block;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  justify-items: center;
+  
+}
+
+/* Стили для карточек фильтров */
+.filter-card {
+  display: inline-block;
+  width: 180px;
+  height: 120px;
+  border: 2px solid #2c2c2c;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 5px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  vertical-align: top;
+  overflow: hidden;
+}
+
+.filter-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.filter-card h6 {
+  font-size: 16px;
+  margin: 0 0 5px 0;
+  font-weight: 700;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 3px;
+}
+
+.filter-card p {
+  font-size: 14px;
+  margin: 0;
+  color: #555;
+}
+
+.filters-container {
+  visibility: hidden;
+  position: absolute;
+  width: 100%;
+  max-width:1330px;
+  top:210px;
+  overflow: hidden;
+  margin-right: 0;
+  transition: all 0.5s ease;
+}
+.header-container.expanded .filters-container {
+  height: auto;
+  visibility: visible;
+}
+
+.empty-button{
+  background-color: transparent;
+  border: none;
+}
+
+.filter-checkbox {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  border: 2px solid #2c2c2c;
+  border-radius: 8px;
+  background: white;
+  transition: all 0.3s ease;
+  width: 260px; 
+  height: auto;
+  box-sizing: border-box;
+  max-width: 300px;
+}
+.filter-checkbox:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+}
+.filter-checkbox input {
+  display: none;
+}
+.checkbox-custom {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border: 2px solid #2c2c2c;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+.filter-checkbox input:checked + .checkbox-custom {
+  background-color: #2c2c2c;
+}
+.filter-checkbox input:checked + .checkbox-custom::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-content {
+  flex: 1;
+  text-align: center;
+}
+
+.checkbox-content h6 {
+  font-size: 16px;
+  margin: 0 0 5px 0;
+  font-weight: 700;
+}
+
+.checkbox-content p {
+  font-size: 14px;
+  margin: 0;
+  color: #555;
+}
+.filter-group {
+  margin-bottom: 25px;
+  margin-right: 25px;
+  border: 2px solid #2c2c2c;
+  border-radius: 10px;
+  padding: 15px;
+  background: white;
+  position: relative;
+  max-width: 350px;
+  min-width: 300px;
+  min-height: 320px;
+}
+
+.filter-subgroup {
+  margin-top: 10px;
+  margin-left: 20px;
+  padding-left: 15px;
+  border-left: 2px solid #aaa;
+}
+
+.group-checkbox {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 0;
+}
+
+.filter-checkbox {
+  margin: 10px 0;
+  width: 100%; 
+  box-sizing: border-box;
+}
+.filter-warmup{
+  margin:30px;
+  margin-right:0px;
+}
+.flex-container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.pagination li{
+  margin: 5px;
+}
+.number a{
+  border: 2px solid black;
+  padding: 5px 10px;
+}
+.current_page{
+  background-color: #2C2C2C;
+  color: white;
+}
+.disabled{
+  opacity:0.5;
+}

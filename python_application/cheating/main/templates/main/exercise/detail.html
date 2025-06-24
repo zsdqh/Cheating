@@ -1,0 +1,57 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+  {{exersise.name}} 
+{% endblock title %} 
+{% block content %}
+<div class="detail-exercise">
+  <div class="detail-img">
+    <img
+      src="{% if exercise.image %}{{exercise.image.url}} {% else %} {% static 'img\noimage.png' %} {% endif %}"
+      alt=""
+      class="detail-image"
+    />
+  </div>
+
+  <div class="detail-description">
+    <div class="detail-title">
+      <h2>
+      {{exercise.name}}
+      {% if exercise.is_liked %}
+      <i class="fas fa-heart red-heart heart"></i>
+      {% else %}
+      <i class="fas fa-heart empty-heart heart"></i>
+      {% endif %} 
+      </h2>
+    </div>
+    <div>
+    <h4 class="exercise-type">{{exercise.type}}</h4>
+    </div>
+    <p class="mt-10 description-text">{{exercise.description}}</p>
+
+    {% comment %} youtube {% endcomment %}
+    <div>
+    {% if exercise.video_link %}
+      <iframe
+      class="d-flex youtube-video"
+        src="{{exercise.video_link}}"
+        title="YouTube video player"
+        frameborder="3"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      ></iframe>
+    {% else %}
+    <div class="missed-video">Видео пока отсутствует,<br>но мы работаем над этим</div>
+    {% endif %}
+    </div>
+    <div class="muscle-container">
+        {% for muscle in exercise.muscles.all %}
+          <div class="single-muscle" onclick="event.stopPropagation(); window.location.href='{{ muscle.get_absolute_url }}';"   style="cursor: pointer;">
+            {{muscle.name}}
+          </div>
+        {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

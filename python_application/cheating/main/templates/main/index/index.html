@@ -1,0 +1,325 @@
+{% extends "main/base.html" %} 
+{% load static %} 
+{% load custom_filters %}
+{% block title %}ЧитинГ{% endblock title %}
+
+{% block header %}
+<form method="post" action="/filtered">
+  {% csrf_token %}
+  <div class="form-container">
+    <div class="search-container">
+      <div class="find-line">
+        <button type='reset' class="empty-button"><i class="fas fa-trash"></i></button>
+        <input type="text" name="user_input" placeholder="Название упражнения" value="{{text}}">
+        <button type="submit" class="empty-button" ><i class="fas fa-search"></i></button>
+      </div>
+    </div>
+    <div class="filters-container" id ="filters-container">
+      <div class="filters-tabs">
+        <div class="filter-tab active" data-target="warmup-exercises">Разминка</div>
+        <div class="filter-tab" data-target="main-exercises">Основное</div>
+        <div class="filter-tab" data-target="isolating-exercises">Изоляция</div>
+      </div>
+      <div class="filters-content">
+        <div id="warmup-exercises" class="filter-tabcontent active">
+          <div class="flex-container">  
+          {% with checked_before=checked|get_item:"warmup" %}
+            {% for warmup_type in muscle_groups %}
+              <div class="filter-checkbox filter-warmup">
+                <input type="checkbox" name="warmup" value="{{warmup_type.slug}}"         
+                  {% if warmup_type.slug in checked_before %}
+                  checked="checked"
+                  {% endif %}>
+                <span class="checkbox-custom"></span>
+                <div class="checkbox-content">
+                  <h6>{{warmup_type.name}}</h6> 
+                </div>
+              </div>
+            {% endfor %}
+          {% endwith %}
+          </div>
+        </div>
+        <div id="main-exercises" class="filter-tabcontent">
+          <div class="flex-container">
+          {% with checked_before=checked|get_item:"main" %}
+           {% for muscle_group in muscle_groups %}
+            {% if muscle_group.name not in excluded %}
+              <div class="filter-group">
+                <div class="filter-checkbox group-checkbox">
+                  <input type="checkbox" name="muscle_group">
+                  <span class="checkbox-custom"></span>
+                  <div class="checkbox-content">
+                    <h6>{{muscle_group.name}}</h6>
+                  </div>
+                </div>
+                <div class="filter-subgroup">
+                  {% for muscle in muscles|get_item:muscle_group.slug %}
+                    <div class="filter-checkbox">
+                      <input type="checkbox" name="main_muscle" value="{{muscle.slug}}"
+                        {% if muscle.slug in checked_before %}
+                        checked="checked"
+                        {% endif %}>
+                      <span class="checkbox-custom"></span>
+                      <div class="checkbox-content">
+                        <h6>{{muscle.name}}</h6>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+           {% endfor %}
+          {% endwith %}
+          </div>
+        </div>
+        
+        <div id="isolating-exercises" class="filter-tabcontent">
+          <div class="flex-container">
+          {% with checked_before=checked|get_item:"isolating" %}
+           {% for muscle_group in muscle_groups %}
+            {% if muscle_group.name not in excluded %}
+              <div class="filter-group">
+                <div class="filter-checkbox group-checkbox">
+                  <input type="checkbox" name="muscle_group">
+                  <span class="checkbox-custom"></span>
+                  <div class="checkbox-content">
+                    <h6>{{muscle_group.name}}</h6>
+                  </div>
+                </div>
+                <div class="filter-subgroup">
+                  {% for muscle in muscles|get_item:muscle_group.slug %}
+                    <div class="filter-checkbox">
+                      <input type="checkbox" name="isolating_muscle" value="{{muscle.slug}}"
+                        {% if muscle.slug in checked_before %}
+                        checked="checked"
+                        {% endif %}>
+                      <span class="checkbox-custom"></span>
+                      <div class="checkbox-content">
+                        <h6>{{muscle.name}}</h6>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+           {% endfor %}
+          {% endwith %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<div class="expander">
+  <div class="double-down">
+    <i class="fas fa-chevron-down d-flex"></i>
+    <i class="fas fa-chevron-down d-flex "></i>
+  </div>
+</div>
+{% endblock header %}
+
+
+{% block content %}
+{% if not exercises%}
+<h1 class="mt-5">Ничего не найдено</h1>
+{% endif %}
+
+<section class="home d-flex flex-column">
+  <div class="home-cards d-flex gap-5">
+    {% for exercise in exercises %}
+    <div class="home-card d-flex flex-column align-items-center text-center">
+      <!-- Основная ссылка как псевдоэлемент -->
+      <a href="{{exercise.get_absolute_url}}" class="card-main-link"></a> 
+      <img
+        src="{% if exercise.image %}{{ exercise.image.url }}{% else %}/static/img/noimage.png{% endif %}"
+        class="card-img"
+      />
+      <hr class="horizontal-card-line" />
+      <h5 class="title-card">{{ exercise.name }}</h5>
+      <a href="google.com">
+        {% if exercise.is_liked %}
+        <i class="fas fa-heart heart red-heart"></i>
+        {% else %}
+        <i class="fas fa-heart empty-heart heart"></i>
+        {% endif %}
+      </a>
+      <div class="muscle-container">
+        {% for muscle in exercise.muscles.all %}
+          <div class="single-muscle" data-url="{{ muscle.get_absolute_url }}"
+          >
+            {{muscle.name}}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <ul class="pagination mt-4">
+    <li class="{% if not exercises.has_previous %} disabled {% endif %}">
+      <a 
+        href="{% if exercises.has_previous %}?page={{exercises.previous_page_number}}{% endif %}"
+        class="{% if not exercises.has_previous %}disabled{% endif %}"
+        >Предыдущая</a>
+    </li>
+      {% for page in exercises.paginator.page_range %}
+        {% if page >= exercises.number|add:-2 and page <= exercises.number|add:2 %}
+        <li class="number"> 
+          <a href="?page={{page}}"
+           class="{% if exercises.number == page %}disabled{% endif %} {% if page == exercises.number %}current_page{% endif %}">{{ page }}
+          </a>
+        </li>
+        {% endif %}
+      {% endfor %}
+    <li class="{% if not exercises.has_next %}disabled {% endif %}">
+      <a 
+        href="{% if exercises.has_next %}?page={{ exercises.next_page_number }}{% endif %}"
+        class="{% if not exercises.has_next %}disabled{% endif %}"
+      >Следующая</a>
+    </li>
+  </ul>
+</section>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Обработка кликов на мышцы
+    document.querySelectorAll('.single-muscle').forEach(muscle => {
+      muscle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        window.location.href = this.dataset.url;
+      });
+    });
+
+    // Обработка кликов по карточке
+    document.querySelectorAll('.home-card').forEach(card => {
+      card.addEventListener('click', function(e) {
+        if (!e.target.closest('.single-muscle')) {
+          const link = this.querySelector('.card-main-link');
+          if (link) window.location.href = link.href;
+        }
+      });
+    });
+
+    // Очистка поля поиска
+    const trashIcon = document.querySelector('.fa-trash');
+    const searchInput = document.querySelector('.find-line input');
+    
+    if (trashIcon && searchInput) {
+      trashIcon.addEventListener('click', function() {
+        searchInput.value = '';
+      });
+    }
+
+    // Раскрытие/сворачивание фильтров
+    const expander = document.querySelector('.expander');
+    const header = document.querySelector('.header');
+    const headerContainer = document.querySelector('.header-container');
+    const doubleDown = document.querySelector('.double-down');
+    let header_elem = document.getElementById("header");
+    let flag = true;
+
+    
+    if (expander && header && headerContainer && doubleDown) {
+      expander.addEventListener('click', function() {
+        if (flag)
+        {
+          filters_elem = document.getElementById("filters-container");
+          header_elem.style.height = (filters_elem.scrollHeight+200+80)+"px";
+        }
+        else
+        {
+          header_elem.style.height = 230+"px";
+        }
+        flag = !flag;
+
+        header.classList.toggle('expanded');
+
+        headerContainer.classList.toggle('expanded');
+        doubleDown.classList.toggle('rotated');
+      });
+    }
+    
+    // Переключение вкладок фильтров
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.filter-tab').forEach(t => {
+          t.classList.remove('active');
+        });
+        this.classList.add('active');
+        
+        document.querySelectorAll('.filter-tabcontent').forEach(content => {
+          content.classList.remove('active');
+        });
+        
+        const targetId = this.dataset.target;
+        document.getElementById(targetId).classList.add('active');
+      });
+    });
+    // Обработка групповых чекбоксов
+  document.querySelectorAll('.group-checkbox input[type="checkbox"]').forEach(groupCheckbox => {
+    groupCheckbox.addEventListener('change', function() {
+      const group = this.closest('.filter-group');
+      const subgroupCheckboxes = group.querySelectorAll('.filter-subgroup input[type="checkbox"]');
+      subgroupCheckboxes.forEach(subCheckbox => {
+        subCheckbox.checked = this.checked;
+      });
+    });
+  });
+
+    // Обработка подчекбоксов
+    document.querySelectorAll('.filter-subgroup input[type="checkbox"]').forEach(subCheckbox => {
+      subCheckbox.addEventListener('change', function() {
+        const group = this.closest('.filter-group');
+        const groupCheckbox = group.querySelector('.group-checkbox input[type="checkbox"]');
+        const subgroupCheckboxes = group.querySelectorAll('.filter-subgroup input[type="checkbox"]');
+        const allChecked = Array.from(subgroupCheckboxes).every(checkbox => checkbox.checked);
+        groupCheckbox.checked = allChecked;
+      });
+    });
+
+    // Переключение вкладок с обновлением высоты
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        // ... существующий код переключения вкладок ...
+        
+        // Обновляем высоту если фильтры раскрыты
+        if (!flag) {
+          const filters_elem = document.getElementById("filters-container");
+          header_elem.style.height = (filters_elem.scrollHeight + 200 + 80) + "px";
+        }
+      });
+    });
+
+      // Функция для синхронизации групповых чекбоксов
+    function updateGroupCheckboxes() {
+      document.querySelectorAll('.filter-group').forEach(group => {
+        const groupCheckbox = group.querySelector('.group-checkbox input[type="checkbox"]');
+        const subgroupCheckboxes = group.querySelectorAll('.filter-subgroup input[type="checkbox"]');
+        
+        const allChecked = Array.from(subgroupCheckboxes).every(checkbox => checkbox.checked);
+        const someChecked = Array.from(subgroupCheckboxes).some(checkbox => checkbox.checked);
+        
+        // Обновляем состояние группового чекбокса
+        groupCheckbox.checked = allChecked;
+        groupCheckbox.indeterminate = someChecked && !allChecked;
+      });
+    }
+
+  // Инициализация при загрузке
+  updateGroupCheckboxes();
+    
+    // Обработка кликов по фильтрам
+    document.querySelectorAll('.filter-checkbox').forEach(checkboxBlock => {
+      const checkbox = checkboxBlock.querySelector('input[type="checkbox"]');
+      if (checkbox) {
+        checkboxBlock.addEventListener('click', function(e) {
+          if (!e.target.closest('.checkbox-custom')) {
+            checkbox.checked = !checkbox.checked;
+            const event = new Event('change', { bubbles: true });
+            checkbox.dispatchEvent(event);
+          }
+        });
+      }
+    });
+  });
+
+</script>
+{% endblock content %}
