@@ -5,22 +5,32 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.core.paginator import Paginator
 
-index_default = {"muscle_groups": list(MuscleGroup.objects.all()),
+index_default:dict = None
+ITEMS_ON_PAGE = 6
+
+def get_default():
+    global index_default
+    if not index_default:
+        create_default()
+    return index_default
+
+def create_default():
+    global index_default
+    index_default = {"muscle_groups": list(MuscleGroup.objects.all()),
                  "muscles": {group.slug: [muscle for muscle in SingleMuscle.objects.filter(muscle_group=group)] for
                              group in MuscleGroup.objects.all()},
                  "excluded": {"Разогрев", "Растяжка"},
                  "checked":{}
                  }
-pagination_number = 6
 
 def popular_list(request):
     exercises = list(Exercise.objects.filter())
     # random.shuffle(exercises)
 
     page = request.GET.get("page", 1)
-    paginator = Paginator(exercises, pagination_number)
+    paginator = Paginator(exercises, ITEMS_ON_PAGE)
     current_page = paginator.page(int(page))
-    return render(request, "main/index/index.html", {'exercises': current_page, **index_default})
+    return render(request, "main/index/index.html", {'exercises': current_page, **get_default()})
 
 
 def exercise_detail(request, exercise_slug):
@@ -35,13 +45,13 @@ def exercise_list(request, muscle_slug=None):
         try:
             muscle = SingleMuscle.objects.get(slug=muscle_slug)
         except SingleMuscle.DoesNotExist:
-            return render(request, 'main/index/index.html', {'exercises': [], **index_default})
+            return render(request, 'main/index/index.html', {'exercises': [], **get_default()})
         exercises = exercises.filter(muscles__in=[muscle])
     if len(exercises) > 1:
         page = request.GET.get("page", 1)
-        paginator = Paginator(exercises, pagination_number)
+        paginator = Paginator(exercises, ITEMS_ON_PAGE)
         current_page = paginator.page(int(page))
-        return render(request, 'main/index/index.html', {'exercises': current_page, 'muscle': muscle, **index_default})
+        return render(request, 'main/index/index.html', {'exercises': current_page, 'muscle': muscle, **get_default()})
     elif len(exercises) == 1:
         return render(request, 'main/exercise/detail.html', {'exercise': exercises[0]})
 
@@ -85,6 +95,6 @@ def filtered_list(request):
     if len(exercises)==1:
         return redirect(reverse('main:exercise_detail', args=[exercises.pop().slug]))
     page = request.GET.get("page", 1)  
-    paginator = Paginator(list(exercises), pagination_number)
+    paginator = Paginator(list(exercises), ITEMS_ON_PAGE)
     current_page = paginator.page(int(page))
-    return render(request, 'main/index/index.html', {"exercises":current_page,  **index_default, "checked":checked, "text":user_input})
+    return render(request, 'main/index/index.html', {"exercises":current_page,  **get_default(), "checked":checked, "text":user_input})

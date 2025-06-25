@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
-    "likes"
+    "likes",
+    "users"
 ]
 
 MIDDLEWARE = [
@@ -76,8 +77,12 @@ WSGI_APPLICATION = 'cheating.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'cheating',
+        'USER': 'cheating',
+        'PASSWORD': 'cheating',
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 
@@ -129,3 +134,5 @@ LANGUAGE_CODE = 'ru-RU'
 USE_I18N = True
 
 LIKES_SESSION_ID = "likes"
+
+AUTH_USER_MODEL = "users.User"

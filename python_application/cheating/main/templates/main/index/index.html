@@ -121,7 +121,9 @@
 
 {% block content %}
 {% if not exercises%}
-<h1 class="mt-5">Ничего не найдено</h1>
+<div class="not-found-container">
+  <h1 class="mt-5 not-found">Ничего не найдено</h1>
+</div>
 {% endif %}
 
 <section class="home d-flex flex-column">
@@ -145,8 +147,7 @@
       </a>
       <div class="muscle-container">
         {% for muscle in exercise.muscles.all %}
-          <div class="single-muscle" data-url="{{ muscle.get_absolute_url }}"
-          >
+          <div class="single-muscle" data-url="{{ muscle.get_absolute_url }}">
             {{muscle.name}}
           </div>
         {% endfor %}

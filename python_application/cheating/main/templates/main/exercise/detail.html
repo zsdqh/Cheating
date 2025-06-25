@@ -27,10 +27,12 @@
     <div>
     <h4 class="exercise-type">{{exercise.type}}</h4>
     </div>
-    <p class="mt-10 description-text">{{exercise.description}}</p>
+    <div class="description-container mt-3">
+      <span class="description-text">{{ exercise.description }}</span>
+    </div>
 
     {% comment %} youtube {% endcomment %}
-    <div>
+    <div class="mt-2">
     {% if exercise.video_link %}
       <iframe
       class="d-flex youtube-video"

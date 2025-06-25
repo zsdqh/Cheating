@@ -23,3 +23,9 @@ class ExerciseAdmin(admin.ModelAdmin):
     list_filter = ['type', 'muscles']
     list_editable = ['name', 'description', 'type']
     prepopulated_fields = {"slug": ("name",)}
+
+# @admin.register(Type)
+# class TypeAdmin(admin.ModelAdmin):
+#     list_display = ['slug', 'name']
+#     list_editable = ['name']
+#     prepopulated_fields = {"slug": ("name",)}
