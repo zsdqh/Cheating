@@ -6,8 +6,8 @@ from django.urls import reverse
 from django.core.paginator import Paginator
 from django.db.models import Q
 
-index_default:dict = None
-ITEMS_ON_PAGE = 6
+index_default:dict = None # Информация, передаваемая в index.html всегда
+ITEMS_ON_PAGE = 6 # Количество карточек упражнений на странице при пагинации
 
 def get_default():
     global index_default
@@ -18,10 +18,10 @@ def get_default():
 def create_default():
     global index_default
     index_default = {
-                 "muscle_groups": list(MuscleGroup.objects.all()),
+                 "muscle_groups": list(MuscleGroup.objects.all()), # Все группы мышц для фильтрации
                  "muscles": {group.slug: [muscle for muscle in SingleMuscle.objects.filter(muscle_group=group)] for
-                             group in MuscleGroup.objects.all()},
-                 "excluded": {"Разогрев", "Растяжка"},
+                             group in MuscleGroup.objects.all()}, # Все мышцы для фильтрации
+                 "excluded": {"Разогрев", "Растяжка"}, # Исключенные "мышцы" для правильного отображения в основных и изоляционных упражнениях
                  "checked":{}
                  }
 
@@ -45,6 +45,7 @@ def exercise_list(request, muscle_slug=None):
     exercises = Exercise.objects.filter()
 
     if muscle_slug:
+        # Обработка нажатия на серый прямоугольник(передачу мышцы в запрос)
         try:
             muscle = SingleMuscle.objects.get(slug=muscle_slug)
         except SingleMuscle.DoesNotExist:
@@ -52,6 +53,7 @@ def exercise_list(request, muscle_slug=None):
         exercises = exercises.filter(muscles__in=[muscle])
 
     if len(exercises) > 1:
+        # Загрузить index.html с отфильтрованными упражнениями
         page = request.GET.get("page", 1)
         paginator = Paginator(exercises, ITEMS_ON_PAGE)
         current_page = paginator.page(int(page))
@@ -80,11 +82,13 @@ def filtered_list(request):
     checked = {}
 
     def filter_exercises_by_type(type_slug, typed_muscles)->list:
+        # Фильтрация упражнений по типу
         return list(exercises.filter(type__slug=type_slug, muscles__slug__in=typed_muscles).distinct())
     
     exercises = Exercise.objects.filter(name__icontains=user_input)
 
     if warmup or isolating_muscles or main_muscles:
+        #Если задана фильтрация по мышцам
         warmup_exercises = list(exercises.filter(type__slug="razminochnoe").filter(
                 Q(muscles__slug__in=warmup) |
                 Q(muscles__muscle_group__slug__in=warmup)
@@ -93,11 +97,16 @@ def filtered_list(request):
         isolating_exercises = filter_exercises_by_type("izoliruyushee", isolating_muscles)
         main_exercises = filter_exercises_by_type("osnovnoe", main_muscles)
 
+        # Объединение подходящих упражнений и удаление повторений
         exercises = set(warmup_exercises+isolating_exercises+main_exercises)
+
+        # Сохранение параметров выбора между страницами
         checked = {"warmup": warmup, "isolating": isolating_muscles, "main":main_muscles}
 
     if len(exercises)==1:
+        # Если найдено только одно упражнение, то загрузить его страницу
         return redirect(reverse('main:exercise_detail', args=[exercises.pop().slug]))
+    
     page = request.GET.get("page", 1)  
     paginator = Paginator(list(exercises), ITEMS_ON_PAGE)
     current_page = paginator.page(int(page))

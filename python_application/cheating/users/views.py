@@ -22,8 +22,11 @@ def login(request):
             if user:
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse('main:popular_list'))
+            
+            # Добавление в форму подсказки пользователю
             form.add_error(None, "Неверный логин или пароль")
-    else:
+    else:   
+        # Очистка формы
         form = UserLoginForm()
     return render(request, "users/login.html", {"form":form})
 
@@ -66,9 +69,11 @@ def verify_password(request):
     to_email = request.POST.get("email")
     recieved_code = request.POST.get("code")
     if to_email:
+        # Если email был введен
         try:
             usr = User.objects.get(email=to_email)
             code = str(random.randint(100000, 999999))
+            # Сохранение отправляемого кода в сессии
             request.session['verify_code'] = code
 
             subject = 'Служба восстановления пароля Cheating'
@@ -80,15 +85,18 @@ def verify_password(request):
             msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
             msg.attach_alternative(html_content, "text/html")
             msg.send()
+
             return render(request, "users/enter_code.html", {"user_to_change": usr})
         except User.DoesNotExist:
+            # Неверная почта
             return render(request, "users/enter_email.html", {"error":"Пользователя с такой почтой не существует", "email":to_email})
         
     usr = User.objects.get(id=request.POST.get("user_to_change"))
     
     if recieved_code==request.session['verify_code']:
+        # Код введен правильно
         return render(request, "users/change_password.html", {"user_to_change": usr})
-        
+    # Код введен неправильно
     return render(request, "users/enter_code.html", {"user_to_change":usr, "error":"Неверный код"})
 
 

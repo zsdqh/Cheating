@@ -52,6 +52,7 @@ class SingleMuscle(models.Model):
         verbose_name_plural = 'Мышцы'
 
     def get_absolute_url(self):
+        #Для работы фильтрации по одной мышце(серые прямоугольники)
         return reverse("main:exercises_by_muscle", args=[self.slug])
 
     def __str__(self):
@@ -59,6 +60,7 @@ class SingleMuscle(models.Model):
 
 
 class Exercise(models.Model):
+    # Упражнение, задействуюее некоторые мышцы
     name = models.CharField(max_length=50, unique=True, verbose_name="Имя")
     image = models.ImageField(blank=True, upload_to='exercises', verbose_name="Изображение")
     description = models.TextField(verbose_name="Описание")
@@ -85,4 +87,5 @@ class Exercise(models.Model):
         return self.name
 
     def get_absolute_url(self):
+        # Перенос на страницу упражнения
         return reverse("main:exercise_detail", args=[self.slug])
