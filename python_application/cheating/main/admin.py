@@ -24,6 +24,7 @@ class ExerciseAdmin(admin.ModelAdmin):
     list_editable = ['name', 'description', 'type']
     prepopulated_fields = {"slug": ("name",)}
 
+# Если нужно добавить типы упражнений
 # @admin.register(Type)
 # class TypeAdmin(admin.ModelAdmin):
 #     list_display = ['slug', 'name']

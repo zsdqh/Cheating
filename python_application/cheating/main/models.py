@@ -84,9 +84,5 @@ class Exercise(models.Model):
     def __str__(self):
         return self.name
 
-    # Переписать позже
-    def is_liked(self):
-        return random.choice([True, False])
-
     def get_absolute_url(self):
         return reverse("main:exercise_detail", args=[self.slug])

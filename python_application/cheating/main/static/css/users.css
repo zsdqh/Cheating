@@ -1,0 +1,130 @@
+.center-div {
+  align-items: center;
+}
+.fixed-button{
+    width: fit-content;
+    padding: 3px 20px;
+}
+.main-container{
+    max-width: fit-content;
+    margin: auto;
+}
+.login-title {
+  background-color: #fff;
+  padding: 40px 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+.large-padding{
+    padding-bottom: 300px;
+}
+.registration-container{
+    max-width: 700px;
+}
+.error{
+    color: red;
+    font-size: 10px;
+    margin-left: 10px;
+}
+/* контейнер всей страницы */
+.profile-page {
+  padding: 40px 16px;
+  display: flex;
+  justify-content: center;
+}
+
+/* центрируем и ограничиваем по ширине форму */
+.profile-edit-container {
+  width: 100%;
+  max-width: 500px;
+  align-items: center;
+}
+.profile-edit-container input{
+  max-width: 370px;
+  margin: auto;
+}
+
+/* фото профиля */
+.profile-photo-container {
+  display: flex;               /* включаем Flex-контейнер */
+  justify-content: center;     /* по горизонтали */
+  align-items: center;         /* по вертикали */
+  margin: 0px;         /* ещё можно добавить отступ снизу */
+}
+
+/* сам input скрываем, кликаем по label */
+.profile-photo-input {
+  display: none;
+}
+
+/* label оборачивает картинку и ведёт себя как кнопка */
+.profile-photo-label {
+  display: block;
+  width: 300px;              
+  height: 300px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  border: 3px solid #ddd;
+  transition: border-color .2s;
+  margin-left: 0;
+}
+
+.profile-photo-label:hover {
+  border-color: #007bff;
+}
+
+/* картинка внутри круглого контейнера */
+.mini-profile-photo {
+  display: block;           
+  margin: 0 auto;         
+  width: 300px;         
+  height: 300px;
+  object-fit: cover;
+}
+/* никнейм по центру */
+.profile-username {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+/* отступы между полями */
+.profile-fields .form-group {
+  margin-bottom: 16px;
+}
+
+/* стили Bootstrap-поля можно не переопределять, 
+   но при желании: */
+.profile-fields .form-control {
+  border-radius: 4px;
+  height: 40px;
+}
+
+/* кнопка Сохранить — по центру */
+.profile-save-btn {
+  display: block;
+  margin-left: 52px;
+  padding: 10px 24px;
+  background-color: #F0F0F0;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color .2s;
+}
+.profile-save-btn:hover {
+  background-color: #0056b3;
+}
+.column-like{
+  flex-direction: column;
+}
+.button-like{
+  background: #F0F0F0;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+.button-like:hover{
+  background:#0056b3;
+}

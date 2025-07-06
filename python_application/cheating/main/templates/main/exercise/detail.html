@@ -1,8 +1,15 @@
 {% extends 'main/base.html' %}
 {% load static %}
+{% load custom_filters %}
+
 {% block title %}
-  {{exersise.name}} 
+  {{exercise.name}} 
 {% endblock title %} 
+{% block header %}
+<h2>
+  {{exercise.name}} 
+</h2>
+{% endblock header %}
 {% block content %}
 <div class="detail-exercise">
   <div class="detail-img">
@@ -17,11 +24,19 @@
     <div class="detail-title">
       <h2>
       {{exercise.name}}
-      {% if exercise.is_liked %}
-      <i class="fas fa-heart red-heart heart"></i>
-      {% else %}
-      <i class="fas fa-heart empty-heart heart"></i>
-      {% endif %} 
+      <a 
+        href="#"
+        class="favorite-heart"
+        data-url="{% url "likes:toggle_favorite" exercise.slug %}"
+      > 
+        <i 
+        {% if exercise|is_liked:user%}
+        class="fas fa-heart heart red-heart"
+        {% else %}
+        class="fas fa-heart empty-heart heart"
+        {% endif %}
+        ></i>
+      </a> 
       </h2>
     </div>
     <div>
@@ -49,8 +64,8 @@
     </div>
     <div class="muscle-container">
         {% for muscle in exercise.muscles.all %}
-          <div class="single-muscle" onclick="event.stopPropagation(); window.location.href='{{ muscle.get_absolute_url }}';"   style="cursor: pointer;">
-            {{muscle.name}}
+          <div class="single-muscle" data-url="{{ muscle.get_absolute_url }}">
+            {{ muscle.name }}
           </div>
         {% endfor %}
     </div>

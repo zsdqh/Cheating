@@ -1,0 +1,185 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block css_connection %}
+  <link rel="stylesheet" href="{% static 'css/users.css' %}">
+{% endblock css_connection %}
+
+{% block title %}Профиль{% endblock title %}
+{% block header %}<h2>Профиль</h2>{% endblock header %}
+
+{% block content %}
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+  <div id="toastContainer">
+    {% for message in messages %}
+      <div class="toast align-items-center text-white bg-{% if message.tags %}{{ message.tags }}{% else %}success{% endif %} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+        <div class="d-flex">
+          <div class="toast-body">
+            {{ message }}
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<section class="profile-page">
+  <div class="profile-edit-container login-title">
+    <form action="{% url 'users:profile' %}"
+          method="post"
+          enctype="multipart/form-data">
+      {% csrf_token %}
+    {% if user.is_superuser %}
+    <a href="/admin">
+    <div class="mb-4 button-like p-4">
+        Перейти в панель администратора<i class="fa-solid fa-star"></i>
+    </div>
+     </a>
+    {% endif %}
+      <!-- аватарка + выбор файла по клику -->
+    <div class="profile-photo-container">
+        <input type="hidden" name="username" value="{{ user.username }}">
+        <input type="file"
+              id="id_image"
+              name="image"
+              accept="image/*"
+              class="profile-photo-input">
+        <label for="id_image" class="profile-photo-label">
+            {% if user.image %}
+                <img src="{{ user.image.url }}"
+                    alt="Аватар"
+                    class="mini-profile-photo">
+            {% else %}
+                <img src="{% static 'img/noimage.png' %}"
+                    alt="Аватар"
+                    class="mini-profile-photo">
+            {% endif %}
+        </label>
+    </div>
+
+      <!-- никнейм -->
+      <h3 class="profile-username mt-4">{{ user.username }}</h3>
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        {% endif %}
+      <!-- поля формы -->
+      <div class="profile-fields">
+        <div class="form-group">
+          <label for="id_first_name">Имя</label>
+          <input type="text"
+                 id="id_first_name"
+                 name="first_name"
+                 class="form-control"
+                 value="{{ form.first_name.value }}"
+                 required>
+        </div>
+        <div class="form-group">
+          <label for="id_last_name">Фамилия</label>
+          <input type="text"
+                 id="id_last_name"
+                 name="last_name"
+                 class="form-control"
+                 value="{{ form.last_name.value }}"
+                 required>
+        </div>
+        <div class="form-group">
+          <label for="id_email">Почта</label>
+          <input type="email"
+                 id="id_email"
+                 name="email"
+                 class="form-control"
+                 value="{{ form.email.value }}"
+                 required>
+        </div>
+      </div>
+
+      <!-- кнопки -->
+       <div class="d-flex">
+            <a href="{% url "users:logout" %}" class="d-flex ml-4"><button type="button" class="profile-save-btn d-flex">Выйти</button></a>
+            <button type="submit" class="profile-save-btn d-flex">Сохранить</button>
+       </div>
+    </form>
+    <hr>
+  </div>
+</section>
+
+<section class="home d-flex flex-column">
+    <h3>Любимые упражнения</h3>
+    <div class="home-cards d-flex gap-5">
+        {% for exercise in exercises %}
+        <div class="home-card d-flex flex-column align-items-center text-center">
+        <!-- Основная ссылка как псевдоэлемент -->
+        <a href="{{exercise.get_absolute_url}}" class="card-main-link"></a> 
+        <img
+            src="{% if exercise.image %}{{ exercise.image.url }}{% else %}/static/img/noimage.png{% endif %}"
+            class="card-img"
+        />
+        <hr class="horizontal-card-line" />
+        <h5 class="title-card">{{ exercise.name }}</h5>
+      <a 
+        href="#"
+        class="favorite-heart"
+        data-url="{% url "likes:toggle_favorite" exercise.slug %}"
+      > 
+        <i 
+        {% if exercise|is_liked:user%}
+        class="fas fa-heart heart red-heart"
+        {% else %}
+        class="fas fa-heart empty-heart heart"
+        {% endif %}
+        ></i>
+      </a> 
+        <div class="muscle-container">
+            {% for muscle in exercise.muscles.all %}
+            <div class="single-muscle" data-url="{{ muscle.get_absolute_url }}">
+                {{muscle.name}}
+            </div>
+            {% endfor %}
+        </div>
+        </div>
+        {% endfor %}
+    </div>
+    </section>
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Скрипт для предпросмотра изображения
+  const imageInput = document.getElementById('id_image');
+  const profilePhoto = document.querySelector('.mini-profile-photo');
+  
+  if (imageInput) {
+    imageInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          profilePhoto.src = e.target.result;
+        };
+        
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+  
+  // Инициализация Toast
+  const toastElements = document.querySelectorAll('.toast');
+  toastElements.forEach(toastEl => {
+    const toast = new bootstrap.Toast(toastEl, {
+      autohide: true,
+      delay: 3000
+    });
+    toast.show();
+  });
+});
+</script>   
+{% endblock extra_js %}
+{% endblock content %}

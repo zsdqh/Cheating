@@ -10,7 +10,7 @@
     <div class="search-container">
       <div class="find-line">
         <button type='reset' class="empty-button"><i class="fas fa-trash"></i></button>
-        <input type="text" name="user_input" placeholder="Название упражнения" value="{{text}}">
+        <input type="text" name="user_input" placeholder="Название упражнения" value="{{ text }}">
         <button type="submit" class="empty-button" ><i class="fas fa-search"></i></button>
       </div>
     </div>
@@ -138,13 +138,19 @@
       />
       <hr class="horizontal-card-line" />
       <h5 class="title-card">{{ exercise.name }}</h5>
-      <a href="google.com">
-        {% if exercise.is_liked %}
-        <i class="fas fa-heart heart red-heart"></i>
+      <a 
+        href="#"
+        class="favorite-heart"
+        data-url="{% url "likes:toggle_favorite" exercise.slug %}"
+      > 
+        <i 
+        {% if exercise|is_liked:user%}
+        class="fas fa-heart heart red-heart"
         {% else %}
-        <i class="fas fa-heart empty-heart heart"></i>
+        class="fas fa-heart empty-heart heart"
         {% endif %}
-      </a>
+        ></i>
+      </a> 
       <div class="muscle-container">
         {% for muscle in exercise.muscles.all %}
           <div class="single-muscle" data-url="{{ muscle.get_absolute_url }}">
@@ -166,7 +172,7 @@
         {% if page >= exercises.number|add:-2 and page <= exercises.number|add:2 %}
         <li class="number"> 
           <a href="?page={{page}}"
-           class="{% if exercises.number == page %}disabled{% endif %} {% if page == exercises.number %}current_page{% endif %}">{{ page }}
+           class="{% if page == exercises.number %}current_page{% endif %}">{{ page }}
           </a>
         </li>
         {% endif %}
@@ -181,23 +187,6 @@
 </section>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Обработка кликов на мышцы
-    document.querySelectorAll('.single-muscle').forEach(muscle => {
-      muscle.addEventListener('click', function(e) {
-        e.stopPropagation();
-        window.location.href = this.dataset.url;
-      });
-    });
-
-    // Обработка кликов по карточке
-    document.querySelectorAll('.home-card').forEach(card => {
-      card.addEventListener('click', function(e) {
-        if (!e.target.closest('.single-muscle')) {
-          const link = this.querySelector('.card-main-link');
-          if (link) window.location.href = link.href;
-        }
-      });
-    });
 
     // Очистка поля поиска
     const trashIcon = document.querySelector('.fa-trash');

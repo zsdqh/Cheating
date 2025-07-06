@@ -100,6 +100,18 @@ footer {
   border-radius: 50%;
   -webkit-text-stroke: 5px black;
 }
+.profile-photo {
+  width: 75px;
+  height: 75px;
+  object-fit: cover;      
+  border-radius: 50%;      
+  border: 3px solid #fff;  
+  box-shadow: 0 0 0 4px #000;
+  transition: box-shadow .2s ease;
+}
+.profile-photo:hover {
+  box-shadow: 0 0 0 4px #000, 0 0 6px rgba(0,0,0,0.3);
+}
 .find-line input {
   width: 350px;
   border-radius: 25px;
@@ -126,6 +138,7 @@ footer {
 }
 .container {
   box-sizing: border-box;
+  min-height:1080px;
   max-width: 1600px;
   margin: 0 auto;
 }
@@ -135,7 +148,8 @@ footer {
   padding: 0;
   margin-bottom: 10px;
   -webkit-text-stroke: 5px black;
-  transition: all 0.5s ease;
+transition: color 0.2s ease-in, all 0.5s ease;
+
 }
 .heart:hover {
   transform: scale(0.9);

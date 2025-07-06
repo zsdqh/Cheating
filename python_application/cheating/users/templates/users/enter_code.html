@@ -1,0 +1,31 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block css_connection %}
+    <link rel="stylesheet" href="{% static 'css\users.css' %}">
+{% endblock css_connection %}
+
+{% block title %}Восстановление пароля{% endblock title %}
+
+{% block header %}
+    <h2>Восстановление пароля</h2>
+{% endblock header %}
+{% block content %}
+
+<div class="form-container column-like mt-4">
+    {% if error %}
+        <div class="alert alert-danger d-flex">
+            <div>{{ error }}</div>
+        </div>
+    {% endif %}
+    <form action="{% url "user:verify_password" %}" method="post" class="d-flex">
+        {% csrf_token %}
+        <input type="hidden" name="user_to_change" value="{{ user_to_change.id }}">
+        <div>
+            <label for="code">Полученный код:</label>
+            <input type="text" class="ml-3 mr-3" id="code" name="code" value="">
+            <button type="submit">Подтвердить</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

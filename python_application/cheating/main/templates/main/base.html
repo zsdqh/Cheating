@@ -1,5 +1,5 @@
 {% load static %}
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     {% comment %} css {% endcomment %}
     <link rel="stylesheet" href="{% static 'css\base.css' %}">
+    {% block css_connection %}{% endblock css_connection %}
 </head>
 <body>
 <header class="header" id="header">
@@ -23,9 +24,21 @@
       </a>
     </div>
     <div class="header-profile">
-      <a href="#" class="m-3">
-        <i class="fas fa-user-circle login-logo"></i>
-      </a>
+      {% if user.is_authenticated  %}
+        <a class="m-3" 
+          href="{% url "users:profile" %}">
+          {% if user.image %}
+            <img class="profile-photo" src="{{ user.image.url }}" alt="Аватар">
+          {% else %}
+            <i class="fas fa-user-circle login-logo"></i>
+          {% endif %}
+        </a>
+      {% else %}
+        <a class="m-3" 
+          href="{% url "users:login" %}">
+          <i class="fas fa-user-circle login-logo"></i>
+        </a>
+      {% endif %}
     </div>
     <div class="header-content">
       {% block header %}
@@ -51,5 +64,8 @@
     </footer>
     {% comment %} js for bootstrap {% endcomment %}
     <script src="{% static 'bootstrap\js\bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/exercise_cards.js' %}"></script>
+    <script src="{% static 'js/likes.js' %}"></script>
+    {% block extra_js %}{% endblock extra_js %}
 </body>
 </html>
